@@ -1,0 +1,136 @@
+<div class="bg-black">
+  <img class="banner d-none d-md-block" src="assets/character-banner.jpg">
+</div>
+
+
+<div class="bg">
+  <div class="container">
+    <!--There should be atleast a name-->
+    <div class="row">
+      <div class="col-12 text-left my-3">
+        <input class="btn" type="button" value="Back" (click)="goBack()">
+      </div>
+    </div>
+
+    <div *ngIf="characterObject && characterObject.name && characterObject.name!=''; else noData" class="card custom-card">
+
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fa fa-child"></i>
+          <span *ngIf="characterObject.name && characterObject.name!=''"> {{characterObject.name | titlecase}} </span>
+
+          <i *ngIf="characterObject.gender && characterObject.gender=='Female'" class="fa fa-venus"></i>
+          <i *ngIf="characterObject.gender && characterObject.gender=='Male'" class="fa fa-mars"></i>
+          <img *ngIf="characterObject.died && characterObject.died!=''" class="skull-icon" src="assets/skull.svg">
+        </h5>
+        <h6 *ngIf="characterObject.titles && characterObject.titles.length>0 && characterObject.titles[0]!=''" class="card-subtitle mb-2 title">{{characterObject.titles[0]}}</h6>
+        <hr>
+
+        <p *ngIf="characterObject.born && characterObject.born!=''">Born {{characterObject.born}}
+          <span *ngIf="characterObject.culture&&characterObject.culture!=''"> as {{characterObject.culture|titlecase}}</span>
+          <span *ngIf="(characterObject.fatherObject && characterObject.fatherObject.name && characterObject.fatherObject.name!='') || (characterObject.motherObject && characterObject.motherObject.name && characterObject.motherObject.name!='')">
+            to</span>
+          <a *ngIf="characterObject.fatherObject && characterObject.fatherObject.name && characterObject.fatherObject.name!=''" [routerLink]="['/characters',characterObject.fatherObject.id]">
+            {{characterObject.fatherObject.name | titlecase}}</a>
+          <span *ngIf="characterObject.fatherObject && characterObject.fatherObject.name!='' && characterObject.motherObject && characterObject.motherObject.name && characterObject.motherObject.name!=''">
+            and</span>
+          <a *ngIf="characterObject.motherObject && characterObject.motherObject.name && characterObject.motherObject.name!=''" [routerLink]="['/characters',characterObject.motherObject.id]">
+            {{characterObject.motherObject.name | titlecase}}</a>
+          <span *ngIf="characterObject.spouseObject && characterObject.spouseObject.name && characterObject.spouseObject.name!=''">
+            and got married to
+            <a [routerLink]="['/characters',characterObject.spouseObject.id]">{{characterObject.spouseObject.name | titlecase}}</a>
+          </span>
+          <span *ngIf="characterObject.died && characterObject.died!=''"> and died {{characterObject.died}}</span>.</p>
+
+        <p *ngIf="characterObject.aliases && characterObject.aliases.length>0 && characterObject.aliases[0]!=''">This character is also known as
+          <span>{{characterObject.aliases.join(", ")}}.</span>
+        </p>
+
+        <p *ngIf="characterObject.titles && characterObject.titles.length>1 && characterObject.titles[0]!=''">This character has also earned the title
+          <span>{{characterObject.titles.slice(1).join(", ")}}.</span>
+        </p>
+
+
+        <p *ngIf="characterObject.allyArray && characterObject.allyArray.length > 0">This character is loyal to
+          <ng-container *ngFor="let ally of characterObject.allyArray; let last = last">
+            <a *ngIf="ally.name!=''" [routerLink]="['/houses',ally.id]">{{ally.name | titlecase}}</a>
+            <span *ngIf='!last'>, </span>
+            <span *ngIf='last'>.</span>
+          </ng-container>
+        </p>
+
+        <p *ngIf="characterObject.booksArray && characterObject.booksArray.length > 0">This character is mentioned in the book
+          <ng-container *ngFor="let book of characterObject.booksArray; let last = last">
+            <a *ngIf="book.name!=''" [routerLink]="['/books',book.id]">{{book.name | titlecase}}</a>
+            <span *ngIf='!last'>, </span>
+            <span *ngIf='last'>.</span>
+          </ng-container>
+        </p>
+
+        <p *ngIf="characterObject.povBooksArray && characterObject.povBooksArray.length > 0">This character has a POV chapter in the book
+          <ng-container *ngFor="let book of characterObject.povBooksArray; let last = last">
+            <a *ngIf="book.name!=''" [routerLink]="['/books',book.id]">{{book.name | titlecase}}</a>
+            <span *ngIf='!last'>, </span>
+            <span *ngIf='last'>.</span>
+          </ng-container>
+        </p>
+
+
+        <p *ngIf="characterObject.tvSeries&&characterObject.tvSeries.length>0&&characterObject.tvSeries[0]!=''">This character has appeared in season
+          <span *ngFor="let season of characterObject.tvSeries;let last=last">{{season.replace("Season ","")}}
+            <span *ngIf="!last">, </span>
+          </span>
+          <span *ngIf="characterObject.playedBy&&characterObject.playedBy.length>0&&characterObject.playedBy[0]!=''"> and is played by {{characterObject.playedBy.join(", ")}}</span>
+          <span>.</span>
+        </p>
+
+      </div>
+    </div>
+
+    <ng-template #noData>
+
+      <div *ngIf="gotResponse">
+
+        <div class="row text-light">
+          <p class="col-12 text-center">Your Grace! We have failed You. We could not find a thing.</p>
+        </div>
+        
+      </div>
+
+      <div *ngIf="!gotResponse">
+
+        <div class="row">
+          <!--Loader-->
+          <div class="col-12 content-center m-50">
+            <div class="lds-grid">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+
+
+          <div class="col-12 text-light text-center">
+            Your Grace! We have sent out 20 thousand men to bring what you asked!
+          </div>
+        </div>
+
+      </div>
+    </ng-template>
+
+    <div class="row" *ngIf="characterObject && characterObject.name && characterObject.name!=''">
+      <div class="col-12 text-right my-3">
+        <input class="btn" type="button" value="Back" (click)="goBack()">
+      </div>
+    </div>
+
+
+  </div>
+
+</div>

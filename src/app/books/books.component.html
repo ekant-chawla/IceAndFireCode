@@ -1,0 +1,113 @@
+<div class="bg">
+  <img class="banner d-none d-md-block" src="assets/book-banner.png">
+</div>
+
+<div class="bg">
+
+  <div class="container">
+    <!--There should be atleast a name-->
+    <div class="row">
+      <div class="col-12 text-left my-3">
+        <input class="btn" type="button" value="Back" (click)="goBack()">
+      </div>
+    </div>
+
+    <div *ngIf="bookObject && bookObject.name && bookObject.name!=''; else noData" class="card custom-card">
+
+      <div class="card-body">
+
+        <h5 class="card-title">
+          <i class="fa fa-book"></i>
+          <span> {{bookObject.name}}</span>
+        </h5>
+        <h6 *ngIf="bookObject.authors && bookObject.authors.length>0 && bookObject.authors[0]!=''" class="card-subtitle mb-2 title">Written by {{bookObject.authors.join(", ")}}</h6>
+
+        <hr>
+
+        <div class="row">
+          <p *ngIf="bookObject.isbn && bookObject.isbn!=''" class="title col-12 col-md-6 col-lg-4">ISBN :
+            <span class="text-light">{{bookObject.isbn}}</span>
+          </p>
+
+          <p *ngIf="bookObject.publisher && bookObject.publisher!=''" class="title col-12 col-md-6 col-lg-4">Publisher :
+            <span class="text-light">{{bookObject.publisher}}</span>
+          </p>
+
+          <p *ngIf="bookObject.released && bookObject.released!=''" class="title col-12 col-md-6 col-lg-4">Publish Date :
+            <span class="text-light">{{bookObject.released | date}}</span>
+          </p>
+
+          <p *ngIf="bookObject.country && bookObject.country!=''" class="title col-12 col-md-6 col-lg-4">Country :
+            <span class="text-light">{{bookObject.country}}</span>
+          </p>
+
+          <p *ngIf="bookObject.mediaType && bookObject.mediaType!=''" class="title col-12 col-md-6 col-lg-4">Type :
+            <span class="text-light">{{bookObject.mediaType}}</span>
+          </p>
+
+          <p *ngIf="bookObject.numberOfPages && bookObject.numberOfPages!=''" class="title col-12 col-md-6 col-lg-4">Pages :
+            <span class="text-light">{{bookObject.numberOfPages}}</span>
+          </p>
+
+          <p *ngIf="bookObject.charactersArray && bookObject.charactersArray.length>0" class="title col-12">Characters :
+            <ng-container *ngFor="let character of bookObject.charactersArray; let last = last">
+              <a *ngIf="character.name!=''" [routerLink]="['/characters',character.id]">{{character.name | titlecase}}</a>
+              <span class="text-light" *ngIf='!last'>, </span>
+            </ng-container>
+          </p>
+
+          <p *ngIf="bookObject.povCharactersArray && bookObject.povCharactersArray.length>0" class="title col-12">POV Characters :
+            <ng-container *ngFor="let character of bookObject.povCharactersArray; let last = last">
+              <a *ngIf="character.name!=''" [routerLink]="['/characters',character.id]">{{character.name | titlecase}}</a>
+              <span class="text-light" *ngIf='!last'>, </span>
+            </ng-container>
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <ng-template #noData>
+      <div *ngIf="gotResponse">
+
+        <div class="row text-light">
+          <p class="col-12 text-center">Your Grace! We have failed You. We could not find a thing.</p>
+        </div>
+
+
+      </div>
+      <div *ngIf="!gotResponse">
+        <div class="row">
+          <!--Loader-->
+          <div class="col-12 content-center m-50">
+            <div class="lds-grid">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+
+
+          <div class="col-12 text-light text-center">
+            Your Grace! We have sent out 20 thousand men to bring what you asked!
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <div *ngIf="gotResponse && bookObject && bookObject.name && bookObject.name!=''" class="row">
+      <div class="col-12 text-right my-3">
+        <input class="btn" type="button" value="Back" (click)="goBack()">
+      </div>
+    </div>
+
+
+  </div>
+</div>

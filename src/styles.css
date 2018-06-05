@@ -1,1 +1,143 @@
 /* You can add global styles to this file, and also import other style files */
+:root{
+    font-size: 16px;
+}
+
+body{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.banner{
+    max-height: 500px;
+    max-width: 100%;
+    margin: auto;   
+}
+
+.skull-icon{
+    width: 1rem;
+    margin-left: 5px;
+}
+
+.custom-card{
+    margin-top: 0.6rem;
+    height: calc(100% - 1.2rem);
+    border: 1px solid rgba(0,0,0,0.25);
+    box-shadow: 2px 2px 9px 2px;
+    background-color: #0b0b0c;
+}
+
+.bg-black{
+    background: black;
+}
+
+hr{
+    border: 1px solid white;
+}
+
+.card-title{
+    color: white;
+}
+
+.card-body{
+    color: white;
+}
+
+.title{
+ color: #b1d2f0;    
+}
+
+.bg{
+    background-color: #113253;
+    background-image: url('assets/bg.jpg');
+}
+
+.bg-404{
+  background-color: #BDDEFF;
+  min-height: calc(100vh - 80px);
+}
+
+.bg-404 img{
+  max-width: 100%;
+}
+
+a{
+    color: white;
+    font-style: oblique;
+}
+
+.m-50{
+  margin-left: calc(50% - 32px);
+}
+
+/* loader css */
+
+.lds-grid {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+  .lds-grid div {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #fed;
+    animation: lds-grid 1.2s linear infinite;
+  }
+  .lds-grid div:nth-child(1) {
+    top: 6px;
+    left: 6px;
+    animation-delay: 0s;
+  }
+  .lds-grid div:nth-child(2) {
+    top: 6px;
+    left: 26px;
+    animation-delay: -0.4s;
+  }
+  .lds-grid div:nth-child(3) {
+    top: 6px;
+    left: 45px;
+    animation-delay: -0.8s;
+  }
+  .lds-grid div:nth-child(4) {
+    top: 26px;
+    left: 6px;
+    animation-delay: -0.4s;
+  }
+  .lds-grid div:nth-child(5) {
+    top: 26px;
+    left: 26px;
+    animation-delay: -0.8s;
+  }
+  .lds-grid div:nth-child(6) {
+    top: 26px;
+    left: 45px;
+    animation-delay: -1.2s;
+  }
+  .lds-grid div:nth-child(7) {
+    top: 45px;
+    left: 6px;
+    animation-delay: -0.8s;
+  }
+  .lds-grid div:nth-child(8) {
+    top: 45px;
+    left: 26px;
+    animation-delay: -1.2s;
+  }
+  .lds-grid div:nth-child(9) {
+    top: 45px;
+    left: 45px;
+    animation-delay: -1.6s;
+  }
+  @keyframes lds-grid {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  

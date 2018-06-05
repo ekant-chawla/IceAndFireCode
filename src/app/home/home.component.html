@@ -1,0 +1,249 @@
+<div class="bg-black">
+  <img class="banner d-none d-md-block" src="assets/home-banner.png">
+</div>
+
+
+
+<div *ngIf="displayDataArray" class="container-fluid">
+
+  <form class="row filter-form py-3" #myForm="ngForm" (ngSubmit)="getData()">
+    <!--Primary Form-->
+    <div class="col-12 col-lg-6">
+      <div class="row">
+
+        <div class="form-group col-12 col-md-8">
+          <label for="search">Search</label>
+          <input type="text" class="form-control" id="search" [(ngModel)]="name" name="name">
+        </div>
+
+
+        <div class="form-group col-12 col-md-4">
+          <label for="findOptions">Find</label>
+          <select class="form-control" id="findOptions" [(ngModel)]="find" name="find">
+            <option *ngFor="let findBy of findOptions" [value]="findBy">{{findBy}}</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <!--Area for more filters based on type selected-->
+    <div class="col-12 col-lg-6">
+
+      <!--Options only for characters-->
+      <div *ngIf="find=='Characters'" class="row">
+
+        <div class="form-group col-12 col-md-6 col-lg-4">
+          <label for="gender">Gender</label>
+          <select class="form-control" id="gender" [(ngModel)]="gender" name="gender">
+            <option *ngFor="let g of genderOptions" [value]="g">{{g}}</option>
+          </select>
+        </div>
+
+
+        <div class="form-group col-12 col-md-6 col-lg-4">
+          <label for="culture">Culture</label>
+          <input type="text" class="form-control" id="culture" [(ngModel)]="culture" name="culture">
+        </div>
+
+        <div class="form-group col-12 col-md-6 col-lg-4">
+          <label for="isAlive">Alive</label>
+          <select class="form-control" id="isAlive" [(ngModel)]="isAlive" name="isAlive">
+            <option *ngFor="let g of isAliveOptions" [value]="g">{{g}}</option>
+          </select>
+        </div>
+      </div>
+      <!--Options only for Books-->
+      <div *ngIf="find=='Books'" class="row">
+
+        <p class="col-12 text-center align-center">No Filters Available For Books</p>
+
+      </div>
+      <!--Options only for houses-->
+      <div *ngIf="find=='Houses'" class="row">
+
+        <div class="form-group col-12 col-md-6 col-lg-4">
+          <label for="region">Region</label>
+          <input type="text" class="form-control" id="region" [(ngModel)]="region" name="region">
+        </div>
+
+        <div class="form-group col-12 col-md-6 col-lg-4">
+          <label for="words">Words</label>
+          <input type="text" class="form-control" id="words" [(ngModel)]="words" name="words">
+        </div>
+
+        <div class="form-group col-12 col-md-6 col-lg-4">
+          <label for="hasDiedOut">Died Out</label>
+          <select class="form-control" id="hasDiedOut" [(ngModel)]="hasDiedOut" name="hasDiedOut">
+            <option *ngFor="let g of hasDiedOutOptions" [value]="g">{{g}}</option>
+          </select>
+        </div>
+
+
+      </div>
+
+    </div>
+
+    <div class="col-12 text-center mt-3">
+      <input class="btn" type="submit" [disabled]="!dataIsReady()" value="Go get it for me lad!">
+    </div>
+
+
+  </form>
+
+
+</div>
+
+<div class="bg py-3">
+
+  <div *ngIf="dataIsReady(); else waitForData" class="container">
+    <!--cards container-->
+    <div *ngIf="displayDataArray && displayDataArray.length>0; else gotNothing" class="row">
+
+      <div *ngFor="let item of displayDataArray" class="col-12 col-md-6 col-lg-4">
+
+
+        <ng-container *ngIf="item.type=='character' && item.name && item.name!=''">
+          <div [routerLink]="['/characters', item.id]" class="card custom-card card-hover">
+            <!--There should be atleast a name or an alias for the item to be displayed-->
+            <div class="card-body">
+
+              <h5 class="card-title">
+                <i class="fa fa-child"></i>
+                <span *ngIf="item.name&&item.name!=''"> {{item.name| titlecase}} </span>
+                <i *ngIf="item.gender && item.gender=='Female'" class="fa fa-venus"></i>
+                <i *ngIf="item.gender && item.gender=='Male'" class="fa fa-mars"></i>
+                <img *ngIf="item.died && item.died!=''" class="skull-icon" src="assets/skull.svg">
+              </h5>
+
+              <h6 *ngIf="item.titles&&item.titles.length>0&&item.titles[0]!=''" class="card-subtitle mb-2 title">{{item.titles[0]|titlecase}}</h6>
+              <hr>
+
+              <p *ngIf="item.born && item.born!=''">Born {{item.born}}
+                <span *ngIf="item.culture&&item.culture!=''"> as {{item.culture|titlecase}}</span>
+                <span *ngIf="item.died&&item.died!=''"> and died {{item.died}}</span>.</p>
+
+              <p *ngIf="item.aliases && item.aliases.length>0 && item.aliases[0]!=''">Also known as
+                <span>{{item.aliases.join(", ")}}.</span>
+              </p>
+
+              <p *ngIf="item.tvSeries&&item.tvSeries.length>0&&item.tvSeries[0]!=''">This character appeared in season
+                <span *ngFor="let season of item.tvSeries;let last=last">{{season.replace("Season ","")}}
+                  <span *ngIf="!last">, </span>
+                </span>
+                <span *ngIf="item.playedBy&&item.playedBy.length>0&&item.playedBy[0]!=''"> and is played by {{item.playedBy.join(", ")}}</span>
+                <span>.</span>
+              </p>
+
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="item.type=='book'&& item.name && item.name!=''">
+          <div [routerLink]="['/books', item.id]" class="card custom-card card-hover">
+            <!--There should be atleast a name or an alias for the item to be displayed-->
+            <div class="card-body">
+
+              <h5 class="card-title">
+                <i class="fa fa-book"></i>
+                <span> {{item.name}}</span>
+              </h5>
+              <h6 *ngIf="item.authors && item.authors.length>0 && item.authors[0]!=''" class="card-subtitle mb-2 title">Written by {{item.authors.join(", ")}}</h6>
+              <hr>
+              <p *ngIf="item.isbn && item.isbn!=''" class="title">ISBN :
+                <span class="text-light">{{item.isbn}}</span>
+              </p>
+              <p *ngIf="item.publisher && item.publisher!=''" class="title">Publisher :
+                <span class="text-light">{{item.publisher}}</span>
+              </p>
+              <p *ngIf="item.released && item.released!=''" class="title">Publish Date :
+                <span class="text-light">{{item.released | date}}</span>
+              </p>
+              <p *ngIf="item.country && item.country!=''" class="title">Country :
+                <span class="text-light">{{item.country}}</span>
+              </p>
+              <p *ngIf="item.mediaType && item.mediaType!=''" class="title">Type :
+                <span class="text-light">{{item.mediaType}}</span>
+              </p>
+              <p *ngIf="item.numberOfPages && item.numberOfPages!=''" class="title">Pages :
+                <span class="text-light">{{item.numberOfPages}}</span>
+              </p>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="item.type=='house' && item.name && item.name!=''">
+          <div [routerLink]="['/houses', item.id]" class="card custom-card card-hover">
+            <!--There should be atleast a name or an alias for the item to be displayed-->
+            <div class="card-body">
+
+              <h5 class="card-title">
+                <i class="fa fa-fort-awesome"></i>
+                <span> {{item.name}}</span>
+                <img *ngIf="item.diedOut && item.diedOut!=''" class="skull-icon" src="assets/skull.svg">
+              </h5>
+              <h6 *ngIf="item.region && item.region!=''" class="card-subtitle mb-2 title">Territory: {{item.region}}</h6>
+              <hr>
+              <p *ngIf="item.founded && item.founded!=''" class="title">Founded :
+                <span class="text-light">{{item.founded}}</span>
+              </p>
+
+              <p *ngIf="item.words && item.words!=''" class="title">Words :
+                <span class="text-light">{{item.words}}</span>
+              </p>
+              <p *ngIf="item.coatOfArms && item.coatOfArms!=''" class="title">Coat Of Arms :
+                <span class="text-light">{{item.coatOfArms}}</span>
+              </p>
+
+              <p *ngIf="item.titles && item.titles.length>0 && item.titles[0]!=''" class="title">Titles :
+                <span class="text-light">{{item.titles.join(", ")}}</span>
+              </p>
+              <p *ngIf="item.seats && item.seats.length>0 && item.seats[0]!=''" class="title">Seats :
+                <span class="text-light">{{item.seats.join(", ")| titlecase}}</span>
+              </p>
+              <p *ngIf="item.ancestralWeapons && item.ancestralWeapons.length>0 && item.ancestralWeapons[0]!=''" class="title">Ancestral Weapons :
+                <span class="text-light">{{item.ancestralWeapons.join(", ")}}</span>
+              </p>
+
+            </div>
+          </div>
+        </ng-container>
+
+      </div>
+    </div>
+
+    <ng-template #gotNothing>
+
+      <div class="row text-light">
+        <p class="col-12 text-center">Your Grace! We have failed You. We could not find a thing.</p>
+      </div>
+
+    </ng-template>
+  </div>
+
+  <ng-template #waitForData>
+    <div class="container">
+      <div class="row no-gutters">
+        <!--Loader-->
+        <div class="col-12 content-center m-50">
+          <div class="lds-grid">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+
+
+        <div class="col-12 text-light text-center">
+          Your Grace! We have sent out 20 thousand men to bring what you asked!
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

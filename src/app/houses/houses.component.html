@@ -1,0 +1,133 @@
+<div class="bg-black">
+  <img class="banner d-none d-md-block" src="assets/house-banner.jpg">
+</div>
+
+<div class="bg">
+  <div class="container">
+    <!--There should be atleast a name-->
+    <div class="row">
+      <div class="col-12 text-left my-3">
+        <input class="btn" type="button" value="Back" (click)="goBack()">
+      </div>
+    </div>
+
+    <div *ngIf="houseObject && houseObject.name && houseObject.name!=''; else noData" class="card custom-card">
+
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fa fa-fort-awesome"></i>
+          <span> {{houseObject.name}}</span>
+          <img *ngIf="houseObject.diedOut && houseObject.diedOut!=''" class="skull-icon" src="assets/skull.svg">
+        </h5>
+        <h6 *ngIf="houseObject.region && houseObject.region!=''" class="card-subtitle mb-2 title">Territory: {{houseObject.region | titlecase}}</h6>
+        <hr>
+
+        <p *ngIf="(houseObject.founded && houseObject.founded!='') || (houseObject.founderObject && houseObject.founderObject!='')"
+          class="title">Foundation :
+          <span class="text-light">The house was founded
+          </span>
+          <span *ngIf="houseObject.founded && houseObject.founded!=''" class="text-light">
+            in the {{houseObject.founded}}
+          </span>
+          <span *ngIf="houseObject.founderObject && houseObject.founderObject.name!=''" class="text-light">
+            by
+          </span>
+          <a [routerLink]="['/characters',houseObject.founderObject.id]" *ngIf="houseObject.founderObject && houseObject.founderObject.name!=''">
+            {{houseObject.founderObject.name | titlecase}}
+          </a>
+        </p>
+
+        <p *ngIf="houseObject.diedOut && houseObject.diedOut!=''" class="title">
+          Died Out:
+          <span class="text-light">
+            This house died out in {{houseObject.diedOut}}
+          </span>
+        </p>
+
+        <p *ngIf="houseObject.lordObject && houseObject.lordObject.name!=''" class="title">Current Lord :
+          <a [routerLink]="['/characters',houseObject.lordObject.id]">{{houseObject.lordObject.name | titlecase}}</a>
+        </p>
+
+        <p *ngIf="houseObject.heirObject && houseObject.heirObject.name!=''" class="title">Current Heir :
+          <a [routerLink]="['/characters',houseObject.heirObject.id]">{{houseObject.heirObject.name | titlecase}}</a>
+        </p>
+
+        <p *ngIf=" houseObject.words && houseObject.words!='' " class="title ">Words :
+          <span class="text-light ">{{houseObject.words}}</span>
+        </p>
+        <p *ngIf="houseObject.coatOfArms && houseObject.coatOfArms!='' " class="title ">Coat Of Arms :
+          <span class="text-light ">{{houseObject.coatOfArms}}</span>
+        </p>
+
+        <p *ngIf="houseObject.titles && houseObject.titles.length>0 && houseObject.titles[0]!=''" class="title">Titles :
+          <span class="text-light">{{houseObject.titles.join(", ")| titlecase}}</span>
+        </p>
+        <p *ngIf="houseObject.seats && houseObject.seats.length>0 && houseObject.seats[0]!=''" class="title">Seats :
+          <span class="text-light">{{houseObject.seats.join(", ") | titlecase}}</span>
+        </p>
+
+        <p *ngIf="houseObject.ancestralWeapons && houseObject.ancestralWeapons.length>0 && houseObject.ancestralWeapons[0]!=''" class="title">Ancestral Weapons :
+          <span class="text-light">{{houseObject.ancestralWeapons.join(", ")| titlecase}}</span>
+        </p>
+
+        <p *ngIf="houseObject.overlordObject && houseObject.overlordObject.name!=''" class="title">Overlord :
+          <a [routerLink]="['/houses',houseObject.overlordObject.id]">{{houseObject.overlordObject.name| titlecase}}</a>
+        </p>
+
+        <p *ngIf="houseObject.cadets && houseObject.cadets.length>0" class="title">Cadet Braches :
+          <ng-container *ngFor="let cadet of houseObject.cadets; let last = last">
+            <a *ngIf="cadet.name!=''" [routerLink]="['/houses',cadet.id]">{{cadet.name | titlecase}}</a>
+            <span class="text-light" *ngIf='!last'>, </span>
+          </ng-container>
+        </p>
+
+        <p *ngIf="houseObject.members && houseObject.members.length>0" class="title">Sworn Members :
+          <ng-container *ngFor="let member of houseObject.members; let last = last">
+            <a *ngIf="member.name!=''" [routerLink]="['/characters',member.id]">{{member.name | titlecase}}</a>
+            <span class="text-light" *ngIf='!last'>, </span>
+          </ng-container>
+        </p>
+      </div>
+    </div>
+
+    <ng-template #noData>
+
+      <div *ngIf="gotResponse">
+        <div class="row text-light">
+          <p class="col-12 text-center">Your Grace! We have failed You. We could not find a thing.</p>
+        </div>
+      </div>
+
+      <div *ngIf="!gotResponse">
+        <div class="row">
+          <!--Loader-->
+          <div class="col-12 content-center m-50">
+            <div class="lds-grid">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+
+          <div class="col-12 text-light text-center">
+            Your Grace! We have sent out 20 thousand men to bring what you asked!
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="row" *ngIf="houseObject && houseObject.name && houseObject.name!=''">
+      <div class="col-12 text-right my-3">
+        <input class="btn" type="button" value="Back" (click)="goBack()">
+      </div>
+    </div>
+
+
+  </div>
+</div>
